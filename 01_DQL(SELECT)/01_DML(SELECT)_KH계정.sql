@@ -156,7 +156,7 @@ FROM EMPLOYEE
 */
 
 SELECT DISTINCT JOB_CODE,DEPT_CODE
-FROM EMPLOYEE
+FROM EMPLOYEE;
 -- (JOB_CODE, DEPT_CODE)쌍으로 묶어서 중복 판별
 
 ------------------------------------------------------
@@ -176,8 +176,30 @@ FROM EMPLOYEE
     >, <, >=, <=      -> 대소비교
     =                 -> 동등비교
     !=, ^=, <>        -> 동등하지 않은지 비교
+    
 */
 
+-- EMPLOYEE에서 부서코드가 'D9'인 사원들만 조회(이때, 모든 칼럼 조회)
+SELECT *
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D9';
+
+-- EMPLOYEE에서 부서코드가 'D1'인 사원들의 사원명, 급여, 부서코드만 조회
+SELECT EMP_NAME, SALARY, DEPT_CODE
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D1';
+
+-- EMPLOYEE에서 부서코드가 'D1'이 아닌 사원들의 사번, 사원명, 부서코드 조회
+SELECT EMP_NAME, SALARY, DEPT_CODE
+FROM EMPLOYEE
+-- WHERE DEPT_CODE != 'D1';
+-- WHERE DEPT_CODE ^= 'D1';
+WHERE DEPT_CODE <> 'D1';
+
+-- 급여 400만원 이상인 사원들의 사원명, 부서코드, 급여 조회
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE SALARY >= 4000000;
 
 
 
