@@ -284,6 +284,14 @@ WHERE HIRE_DATE BETWEEN '90/01/01' AND '01/01/01';
     
     >> '%' : 0글자 이상
     EX) 비교대상컬럼 LIKE '문자%'       => 비교대상의 컬럼값이 문자로 "시작" 되는 걸 조회
+    EX) 비교대상컬럼 LIKE '%문자'       => 비교대상의 컬럼값이 문자로 "끝" 나는걸 조회
+    EX) 비교대상컬럼 LIKE '%문자%'      => 비교대상의 컬럼값이 문자가 "포함" 되는걸 조회
+    
+    >> '_' : 1글자 이상
+    EX) 비교대상컬럼 LIKE '_문자'       => 비교대상의 컬럼값에 문자앞에 무조건 한글자만 올 경우 조회
+        비교대상컬럼 LIKE '__문자'      => 비교대상의 컬럼값에 문자앞에 무조건 두글자가 올 경우 조회
+        비교대상컬럼 LIKE '_문자_'      => 비교대상의 컬럼값에 문자 앞과 문자 뒤에 무조건 한글자씩 올 경우
+        
     
 */
 
@@ -291,3 +299,68 @@ WHERE HIRE_DATE BETWEEN '90/01/01' AND '01/01/01';
 SELECT EMP_NAME, SALARY, HIRE_DATE
 FROM EMPLOYEE
 WHERE EMP_NAME LIKE '전%';
+
+-- 이름이 하로 끝나는 사원들의 사원명, 주민번호, 전화번호 조회
+SELECT EMP_NAME, EMP_NO, PHONE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '%하';
+
+-- 이름중에 하가 포함된 사원들의 사원명, 주민번호, 전화번호 조회
+SELECT EMP_NAME, EMP_NO, PHONE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '%하%';
+
+-- 이름의 가운데 글자가 하 인 사원들의 사원명, 전화번호 조회
+SELECT EMP_NAME, PHONE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '_하_';
+
+-- 전화번호의 3번째 자리가 1인 사원들의 사번, 사원명, 전번, 이메일 조회
+-- 와일드카드 : _(1글자), %(0글자 이상)
+
+SELECT EMP_ID, EMP_NAME, PHONE, EMAIL
+FROM EMPLOYEE
+WHERE PHONE LIKE '__1%';
+
+-- ** 특이케이스
+-- 이메일 중 _ 기준으로 앞글자가 3글자인 사원들의 사번, 이름, 이멩리 조회
+-- EX) sim_bs@kh.com 등등
+
+SELECT EMP_ID, EMP_NAME, EMAIL
+FROM EMPLOYEE
+WHERE EMAIL LIKE '___%'; -- 원했던 결과 도출 못함!
+-- 와일드카드로 사용되고 있는 문자의 컬럼값에 담긴문자가 동일하기 때문에 제대로 조회가 안 됨
+--> 어떤게 와일드카드고 어떤게 데이터 값인지 구분지어야됨!
+--> 데이터 값으로 취급하고자 하는 값 앞에 나만의 와일드 카드를 제시하고 나만의 와일드 카드를 ESCAPE OPTION으로 등록해야됨!
+
+SELECT EMP_ID, EMP_NAME, EMAIL
+FROM EMPLOYEE
+WHERE EMAIL LIKE '___$_%' ESCAPE '$';
+
+-- 위의 사원들이 아닌 그 외의 사원들 조회
+SELECT EMP_ID, EMP_NAME, EMAIL
+FROM EMPLOYEE
+WHERE EMAIL NOT LIKE '___$_%' ESCAPE '$';
+
+------------------------------실습문제---------------------------
+
+-- 1. EMPLOYEE에서 이름이 '연'으로 끝나는 사원들의 사원명, 입사일 조회
+SELECT EMP_NAME, HIRE_DATE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '%연';
+
+-- 2. EMPLOYEE에서 전화번호 처음 3자리가 010이 아닌 사원들의 사원명, 전화번호 조회
+SELECT EMP_NAME, PHONE
+FROM EMPLOYEE
+WHERE PHONE NOT LIKE '010%';
+
+-- 3. EMPLOYEE에서 이름에 '하'가 포함되어 있고 급여가 240만원 이상인 사원들의 사원명, 급여 조회
+SELECT EMP_NAME, SALARY
+FROM EMPLOYEE
+WHERE SALARY >= 2400000 AND EMP_NAME LIKE '%하%';
+
+-- 4. DEPARTMENT 에서 해외영업부인 부서들의 코드, 부서명 조회
+SELECT DEPT_ID, DEPT_TITLE
+FROM DEPARTMENT
+WHERE DEPT_TITLE LIKE '해외영업%';
+
