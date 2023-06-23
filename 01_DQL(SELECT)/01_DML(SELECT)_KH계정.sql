@@ -201,10 +201,93 @@ SELECT EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE
 WHERE SALARY >= 4000000;
 
+-- EMPLOYEE에서 재직중(EMT_YN 컬럼값이 'N')인 사원들의 사번, 이름, 입사일
+SELECT EMP_ID, EMP_NAME, HIRE_DATE
+FROM EMPLOYEE
+WHERE ENT_YN = 'N';
 
+-- 1. 급여가 300만원 이상인 사원들의 사원명, 급여, 입사일, 연봉(보너스 미포함) 조회
+SELECT EMP_NAME, SALARY, HIRE_DATE, SALARY *12 AS "연봉(보너스 미포함)"
+FROM EMPLOYEE
+WHERE SALARY >= 3000000;
 
+-- 2. 연봉이 5000만원 이상인 사원들의 사원명, 급여, 연봉, 부서코드 조회
+SELECT EMP_NAME, SALARY, SALARY*12 AS "연봉", DEPT_CODE
+FROM EMPLOYEE
+WHERE SALARY * 12 >= 50000000; -- WHERE 절에서는 SELECT절에서 사용된 별칭 사용 불가!!
 
+-- 쿼리 실행 순서
+-- FROM절 -> WHERE절 -> SELECT절
 
+-- 3. 직급코드'J3'이 아닌 사원들의 사번, 사원명, 직급코드, 퇴사여부 조회
+SELECT EMP_ID, EMP_NAME, JOB_CODE, ENT_YN
+FROM EMPLOYEE
+WHERE JOB_CODE ^= 'J3';
 
+-- 부서코드가 'D9' 이면서 급여가 500만원 이상인 사원들의 사번, 사원명, 급여, 부서코드 조회
+SELECT EMP_ID, EMP_NAME, SALARY, DEPT_CODE
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D9' AND SALARY >= 5000000;
 
+-- 부서코드가 'D6'이거나 급여가 300만원 이상인 사원들의 사원명, 부서코드, 급여조회
+SELECT EMP_NAME, DEPT_CODE, SALARY
+FROM EMPLOYEE
+WHERE DEPT_CODE = 'D6' OR SALARY >= 3000000;
 
+-- 급여가 350만원 이상 600만원 이하를 받는 사원들의 사원명, 사번, 급여 조회
+SELECT EMP_NAME, EMP_ID, SALARY
+FROM EMPLOYEE
+-- WHERE 3500000 <= SALARY <= 6000000; 오류발생!! 자바랑 마찬가지임!
+-- WHERE 3500000 <= SALARY AND SALARY <= 6000000;
+WHERE SALARY >= 3500000 AND SALARY <= 6000000; -- 일반적으로는 이 순서로!!
+------------------------------------------------------------------------
+/*
+
+    <BETWEEN AND>
+    조건식에서 사용되는 구문
+    몇 이상 몇 이하인 범위에 대한 조건을 제시할 때 사용되는 연산자
+    
+    [표현법]
+    비교대상컬럼 BETWEEN A(값) AND B(값2)
+    => 해당 컬럼값이 A(값1) 이상이고 B(값2) 이하인 경우
+
+*/
+
+SELECT EMP_NAME, EMP_ID, SALARY
+FROM EMPLOYEE
+WHERE SALARY BETWEEN 3500000 AND 6000000;
+
+-- 위의 쿼리 범위 밖의 사람들 조회하고 싶다면? 350미만 600 초과
+
+SELECT EMP_NAME, EMP_ID, SALARY
+FROM EMPLOYEE
+-- WHERE SALARY < 3500000 OR SALARY > 6000000;
+-- WHERE NOT SALARY BETWEEN 3500000 AND 6000000;
+WHERE SALARY NOT BETWEEN 3500000 AND 6000000;
+-- NOT : 논리부정연산자 => 자바에서의 !
+-- 컬럼명 앞 또는 BETWEEN 앞에 기입 가능!
+
+-- 입사일 '90/01/01' ~ '01/01/01'
+SELECT *
+FROM EMPLOYEE
+-- WHERE HIRE_DATE >= '90/01/01' AND HIRE_DATE <= '01/01/01'; -- DATE 형식은 대소비교가능
+WHERE HIRE_DATE BETWEEN '90/01/01' AND '01/01/01';
+
+/*
+    <LIKE>
+    비교하고자 하는 컬럼값 내가 제시한 특정 패턴에 만족될 경우 조회
+    
+    (표현법)
+    비교대상컬럼 LIKE '특정패턴'
+    
+    - 특정패턴 제시시 '%', '_'를 와일드 카드로 사용할 수 있음
+    
+    >> '%' : 0글자 이상
+    EX) 비교대상컬럼 LIKE '문자%'       => 비교대상의 컬럼값이 문자로 "시작" 되는 걸 조회
+    
+*/
+
+-- 사원들 중 성이 전씨인 사원들의 사원명, 급여, 입사일 조회
+SELECT EMP_NAME, SALARY, HIRE_DATE
+FROM EMPLOYEE
+WHERE EMP_NAME LIKE '전%';
