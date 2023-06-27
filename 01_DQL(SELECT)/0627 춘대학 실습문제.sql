@@ -145,30 +145,64 @@ WHERE COACH_PROFESSOR_NO IS NULL;
 -- 이때 출력 화면의 헤더는 "년도", "년도 별 평점" 이라고 찍히게 하고, 점수는 반올림하여
 -- 소수점 이하 한 자리까지만 표시한다.
 
--- 13. 학과 별 휴학생 수를 파악하고자 한다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을
--- 작성하시오.
+SELECT SUBSTR(TERM_NO, 1, 4) 년도, ROUND(AVG(POINT),1) AS "년도 별 평점"                  
+FROM TB_GRADE
+WHERE STUDENT_NO = 'A112113'
+GROUP BY SUBSTR(TERM_NO, 1, 4) -- 이거 제대로 짚고 넘어가기
+ORDER BY 1;
 
--- 14. 춘 대학교에 다니는 동명이인(同名異人) 학생들의 이름을 찾고자 한다. 어떤 SQL 
--- 문장을 사용하면 가능하겠는가?
+
+-- 13. 학과 별 휴학생 수를 파악하고자 한다. 학과 번호와 휴학생 수를 표시하는 SQL 문장을 작성하시오.
+SELECT DEPARTMENT_NO, COUNT(DECODE(ABSENCE_YN, 'Y', 'Y')) "휴학생 수" 
+FROM TB_STUDENT
+GROUP BY DEPARTMENT_NO
+ORDER BY 1;
+
+
+-- 14. 춘 대학교에 다니는 동명이인(同名異人) 학생들의 이름을 찾고자 한다. 어떤 SQL 문장을 사용하면 가능하겠는가?
+SELECT STUDENT_NAME AS "동명이인", COUNT (*) AS "겹친 이름 수"
+FROM TB_STUDENT
+GROUP BY STUDENT_NAME
+HAVING COUNT(*) > 1;
+
 
 -- 15. 학번이 A112113 인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점 , 총
--- 평점을 구하는 SQL 문을 작성하시오. (단, 평점은 소수점 1 자리까지맊 반올림하여
--- 표시핚다.)
+-- 평점을 구하는 SQL 문을 작성하시오. (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.)
 
--- 1. 학생이름과 주소지를 표시하시오. 단, 출력 헤더는 "학생 이름", "주소지"로 하고,
--- 정렬은 이름으로 오름차순 표시하도록 핚다.
+
+-- 1. 학생 이름과 주소지를 표시하시오. 단, 출력 헤더는 "학생 이름", "주소지"로 하고,
+-- 정렬은 이름으로 오름차순 표시하도록 한다.
+SELECT STUDENT_NAME AS "학생 이름", STUDENT_ADDRESS AS "주소지"
+FROM TB_STUDENT
+ORDER BY 1;
 
 -- 2. 휴학중인 학생들의 이름과 주민번호를 나이가 적은 순서로 화면에 출력하시오.
+SELECT STUDENT_NAME, STUDENT_SSN
+FROM TB_STUDENT
+WHERE ABSENCE_YN = 'Y'
+ORDER BY STUDENT_SSN DESC;
 
 -- 3. 주소지가 강원도나 경기도인 학생들 중 1900 년대 학번을 가진 학생들의 이름과 학번, 
--- 주소를 이름의 오름차순으로 화면에 출력하시오. 단, 출력헤더에는 "학생이름","학번", "거주지 주소" 가 출력되도록 핚다.
+-- 주소를 이름의 오름차순으로 화면에 출력하시오. 단, 출력헤더에는 "학생이름", "학번", "거주지 주소" 가 출력되도록 핚다.
+SELECT STUDENT_NAME AS "학생이름", STUDENT_NO AS "학번", STUDENT_ADDRESS AS "거주지 주소"
+FROM TB_STUDENT
+WHERE (STUDENT_ADDRESS LIKE '%강원%' OR STUDENT_ADDRESS LIKE '%경기%') AND SUBSTR(STUDENT_NO, 1, 1) = '9'
+ORDER BY 1;
 
--- 4. 현재 법학과 교수 중 가장 나이가 맋은 사람부터 이름을 확인핛 수 있는 SQL 문장을
+-- 4. 현재 법학과 교수 중 가장 나이가 많은 사람부터 이름을 확인할 수 있는 SQL 문장을
 -- 작성하시오. (법학과의 '학과코드'는 학과 테이블(TB_DEPARTMENT)을 조회해서 찾아내도록 하자)
+SELECT PROFESSOR_NAME, PROFESSOR_SSN
+FROM TB_PROFESSOR
+WHERE DEPARTMENT_NO = '005'
+ORDER BY PROFESSOR_SSN;
 
 
--- 5. 2004 년 2 학기에 'C3118100' 과목을 수강핚 학생들의 학점을 조회하려고 핚다. 학점이
--- 높은 학생부터 표시하고, 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오.
+-- 5. 2004 년 2 학기에 'C3118100' 과목을 수강한 학생들의 학점을 조회하려고 한다. 
+-- 학점이 높은 학생부터 표시하고, 학점이 같으면 학번이 낮은 학생부터 표시하는 구문을 작성해보시오.
+SELECT STUDENT_NO, POINT
+FROM TB_GRADE
+WHERE TERM_NO = '200402' AND CLASS_NO = 'C3118100'
+ORDER BY POINT DESC, STUDENT_NO ASC;
 
 -- 6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL 문을 작성하시오.
 
