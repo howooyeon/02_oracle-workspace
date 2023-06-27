@@ -6,7 +6,7 @@ DROP TABLE NATIONAL;
 DROP TABLE SAL_GRADE;
 
 --------------------------------------------------------
---  DDL for Table DEPARTMENT
+--  DDL for Table DEPARTMENT --
 --------------------------------------------------------
 
   CREATE TABLE "KH"."DEPARTMENT" 
