@@ -5,17 +5,17 @@
     - 단일행 함수 : N개의 값을 읽어들여서 N개의 결과값을 리턴(매행마다 함수 실행 결과 반환)
     - 그룹 함수   : N개의 값을 읽어들여서 1개의 결과값을 리턴(그룹을 지어 그룹별로 함수 실행 결과 반환)
     
-    >> SELECT 절에 단일행 함수, 그룹함수를 함께 못함
+    >> SELECT 절에 단일행 함수, 그룹 함수를 함께 못함
     왜? 결과 행의 개수가 다르기 때문
     
-    >> 함수식을 기술 할 수 있는 위치 : SELECT절, WHERE절, ORDER BY절, GROUP BY 절, HAVING 절
+    >> 함수식을 기술 할 수 있는 위치 : SELECT절, WHERE절, ORDER BY절, GROUP BY절, HAVING절
 */
 
 /*
     <문자 처리 함수>
     * LENGTH / LENGTHB      => 결과값 NUMBER 타입
     
-    LENGTH(컬럼| '문자열값')  : 해당 문자열 값의 글자수 반환
+    LENGTH (컬럼| '문자열값') : 해당 문자열 값의 글자수 반환
     LENGTHB(컬럼| '문자열값') : 해당 문자열 값의 BYTE수 반환
     
     '김' , '나', 'ㄱ' 한 글자당 3BYTE
@@ -70,7 +70,7 @@ FROM EMPLOYEE;
 SELECT SUBSTR('SHOWMETHEMONEY', 7) FROM DUAL;
 SELECT SUBSTR('SHOWMETHEMONEY', 5, 2) FROM DUAL;
 SELECT SUBSTR('SHOWMETHEMONEY', 1, 6) FROM DUAL;
-SELECT SUBSTR('SHOWMETHEMONEY', -8, 3) FROM DUAL; -- 뒤에서부터 8번째 자리
+SELECT SUBSTR('SHOWMETHEMONEY', -8, 3) FROM DUAL; -- 뒤에서부터 8번째 자리 THE 읽어들이는 건 오른쪽으로
 
 SELECT EMP_NAME, EMP_NO, SUBSTR(EMP_NO, 8, 1) AS "성별"
 FROM EMPLOYEE;
@@ -84,10 +84,10 @@ WHERE SUBSTR (EMP_NO, 8, 1) IN ('2', '4');
 -- 남자 사원만 조회
 SELECT EMP_NAME
 FROM EMPLOYEE
-WHERE SUBSTR(EMP_NO, 8, 1) IN (1,3) -- 내부적으로 자동 형변환
+WHERE SUBSTR(EMP_NO, 8, 1) IN (1, 3) -- 내부적으로 자동 형변환
 ORDER BY 1; -- 기본적으로 오름차순
 
--- 함수 중첩 사용
+-- ** 함수 중첩 사용
 SELECT EMP_NAME, EMAIL, SUBSTR(EMAIL, 1, INSTR(EMAIL, '@')-1) AS "아이디"
 FROM EMPLOYEE;
 
@@ -113,16 +113,16 @@ SELECT EMP_NAME, RPAD(EMAIL, 20, '#')
 FROM EMPLOYEE;
 
 --850101-2****** 조회
-SELECT RPAD('850101-2',14, '*')
+SELECT RPAD('850101-2', 14, '*') -- 오른쪽으로 2이후 14번째 자리까지 * 쓰기
 FROM DUAL;
 
  --SELECT EMP_NAME, RPAD(주민번호값으로 성별자리까지 추출한 문자열, 14, '*')
 --FROM EMPLOYEE;
 
-SELECT EMP_NAME, RPAD(SUBSTR(EMP_NO,1 ,8), 14, '*')
+SELECT EMP_NAME, RPAD(SUBSTR(EMP_NO, 1, 8), 14, '*') -- 정석
 FROM EMPLOYEE;
 
-SELECT EMP_NAME, SUBSTR(EMP_NO, 1, 8) || '******'
+SELECT EMP_NAME, SUBSTR(EMP_NO, 1, 8) || '******'    -- 간단한 방법
 FROM EMPLOYEE;
 
 --------------------------------------------------------------------------------
@@ -136,8 +136,8 @@ FROM EMPLOYEE;
 */
 
 SELECT LTRIM('     K  H  ') FROM DUAL; -- 공백 찾아서 제거하고 공백 아닌 문자 나오면 그냥 끝남
-SELECT LTRIM('123123KH123', '123') FROM DUAL;
-SELECT LTRIM('ACABACCKH', 'ABC') FROM DUAL;
+SELECT LTRIM('123123KH123', '123') FROM DUAL;   -- 123 다 제거 이 외에꺼 나오면 그냥 탈출
+SELECT LTRIM('ACABACCKH', 'ABC') FROM DUAL;     -- ABC 다 제거 
 
 SELECT RTRIM('5782KH123', '0123456789') FROM DUAL;
 
@@ -155,7 +155,7 @@ SELECT TRIM('Z' FROM 'ZZZZZKHZZZZ') FROM DUAL;
 
 SELECT TRIM (LEADING 'Z' FROM 'ZZZZZKHZZZ') FROM DUAL; -- LEADING : 앞 => LTRIM과 유사
 SELECT TRIM (TRAILING 'Z' FROM 'ZZZZZKHZZZ') FROM DUAL; -- TRAILING : 뒤 => RTRIM과 유사
-SELECT TRIM (BOTH 'Z' FROM 'ZZZZKHZZZZ') FROM DUAL; -- BOTH : 양쪽 => 생략시 기본값
+SELECT TRIM (BOTH 'Z' FROM 'ZZZZK HZZZZ') FROM DUAL; -- BOTH : 양쪽 => 생략시 기본값
 
 --------------------------------------------------------------------------------
 
@@ -184,7 +184,7 @@ SELECT INITCAP('Welcome To My World') FROM DUAL;
 SELECT CONCAT('ABC', '초콜릿')FROM DUAL;
 SELECT 'ABC' || '초콜릿' FROM DUAL; -- 그냥 연결연산자로도 가능
 
-SELECT CONCAT('ABC', '초콜릿' , '123')FROM DUAL; -- 오류발생!! : 2개만 받을 수 있음!
+SELECT CONCAT('ABC', '초콜릿' , '123')FROM DUAL; -- ** 오류발생!! : 2개만 받을 수 있음!
 SELECT 'ABC' || '초콜릿' || '123' FROM DUAL;
 
 --------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ SELECT 'ABC' || '초콜릿' || '123' FROM DUAL;
     
 */
 
-SELECT EMP_NAME, EMAIL, REPLACE(EMAIL, 'kh.or.kr', 'gmail.com')
+SELECT EMP_NAME, EMAIL, REPLACE(EMAIL, 'kh.or.kr', 'gmail.com') -- STR1 을 STR2 로 갈아
 FROM EMPLOYEE;
 
 --------------------------------------------------------------------------------
@@ -235,13 +235,15 @@ SELECT ROUND(123.456, 3)FROM DUAL;
     *CEIL
     올림처리 해주는 함수
     CEIL(NUMBER)
+    5이상 아니여도 그냥 올림
 */
 
-SELECT CEIL(123.152)FROM DUAL; -- 5이상이 아니여도 무조건 그냥 올림
+SELECT CEIL(123.152) FROM DUAL; -- 5이상이 아니여도 무조건 그냥 올림
 
 /*
     *FLOOR
     소수점 아래 무조건 버림 위치지정이 불가
+    무조건 버림
 */
 
 SELECT FLOOR(123.152) FROM DUAL; -- 무조건 버림 위치 지정 불가
@@ -266,25 +268,27 @@ SELECT TRUNC(123.456, 1)FROM DUAL; -- 소수점 아래 첫째자리까지 표현하고 싶다.
 -- * SYSDATE : 시스템 날짜 및 시간 반환(현재 날짜 및 시간)
 SELECT SYSDATE FROM DUAL;
 
--- * MONTH_BETWEEN(DATE1, DATE2) : 두 날짜 사이의 개월 수 => 내부적으로 DATE1 - DATE2 후 나누기 30, 31이 진행될 거임
+-- * MONTHS_BETWEEN(DATE1, DATE2) : 두 날짜 사이의 개월 수 => 내부적으로 DATE1 - DATE2 후 나누기 30, 31이 진행될 거임
 -- => 결과값은 NUMBER 타입
--- EMPLOYEE 에서 사원명, 입사일, 근무일수, 근무개월수
+-- EMPLOYEE에서 사원명, 입사일, 근무일수, 근무개월수
 
-SELECT EMP_NAME, HIRE_DATE, FLOOR(SYSDATE - HIRE_DATE) || '일' AS "근무일수"
-CEIL MONTHS_BETWEEN(SYSDATE, HIRE_DATE)) || '개월'
+SELECT EMP_NAME, HIRE_DATE, FLOOR(SYSDATE - HIRE_DATE) AS "근무일수",
+CEIL (MONTHS_BETWEEN(SYSDATE, HIRE_DATE)) || '개월' AS "근무개월수"
 FROM EMPLOYEE; --?
 
 -- * ADD_MONTHS(DATE, NUMBER) : 특정날짜에 해당 숫자만큼 개월수를 더해서 날짜를 리턴
 -- => 결과값 : DATE 타입
 SELECT ADD_MONTHS(SYSDATE, 6) FROM DUAL;
+
 -- EMPLOYEE 에서 사원명, 입사일, 입사후 6개월이 된 날짜 조회
-SELECT EMP_NAME, HIRE_DATE, ADD_MONTHS(HIRE_DATE, 6)AS "수습이 끝난 날짜"
+SELECT EMP_NAME, HIRE_DATE, ADD_MONTHS(HIRE_DATE, 6) AS "수습이 끝난 날짜"
 FROM EMPLOYEE;
 
 --* NEXT_DAY(DATE, 요일) : 특정날짜 이후에 가까운 해당 요일의 날짜를 반환해주는 함수
 -- => 결과값은 DATE 타입
 SELECT SYSDATE, NEXT_DAY(SYSDATE, '금요일') FROM DUAL;
 SELECT SYSDATE, NEXT_DAY(SYSDATE, '금') FROM DUAL;
+
 -- 1. 일요일 .....
 SELECT SYSDATE, NEXT_DAY(SYSDATE, 5) FROM DUAL;
 SELECT SYSDATE, NEXT_DAY('20231120','FRIDAY') FROM DUAL; -- 현재 언어가 KOREAN이기 때문
@@ -306,9 +310,9 @@ FROM EMPLOYEE;
 /*
 
      * EXTRACT : 특정 날짜로부터 년도|월|일 값을 추출해서 반환하는 함수
-     EXTRACT(YEAR FROM DATE) : 년도만 출력
-     EXTRACT(MONTH FROM DATE) : 월만 출력
-     EXTRACT(DAY FROM DATE) : 일만 출력
+       EXTRACT(YEAR FROM DATE) : 년도만 출력
+       EXTRACT(MONTH FROM DATE) : 월만 출력
+       EXTRACT(DAY FROM DATE) : 일만 출력
      
      => 결과값은 NUMBER 타입
 */
@@ -369,7 +373,7 @@ SELECT TO_CHAR(SYSDATE, 'MM'),
        TO_CHAR(SYSDATE, 'RM')
 FROM DUAL;
 
--- 일과 관련된 포맷
+-- * 일과 관련된 포맷
 SELECT TO_CHAR(SYSDATE, 'DDD'), -- 올해 기준으로 오늘이 며칠째인지
        TO_CHAR(SYSDATE, 'DD'), -- 월 기준으로 오늘이 며칠째인지
        TO_CHAR(SYSDATE, 'D') -- 주 기준으로 며칠째인지
@@ -383,7 +387,7 @@ FROM DUAL;
 --------------------------------------------------------------------------------
 /*
     * TO_DATE : 숫자타입 또는 문자타입 데이터를 날짜 타입으로 변환시켜주는 함수
-    TO_DATE(숫자|문자, [포맷])
+      TO_DATE(숫자|문자, [포맷])
 */
 SELECT TO_DATE(20100101)FROM DUAL;
 SELECT TO_DATE(100101)FROM DUAL;

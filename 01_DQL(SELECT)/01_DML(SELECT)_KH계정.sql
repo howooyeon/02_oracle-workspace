@@ -74,7 +74,7 @@ FROM EMPLOYEE;
 SELECT EMP_NAME, HIRE_DATE
 FROM EMPLOYEE;
 
--- EMPLOYEE에 사원, 입사일, 근무일수(오늘날짜 - 입사일)
+-- EMPLOYEE에 사원, 입사일, ** 근무일수(오늘날짜 - 입사일)
 -- DATE 형식끼리도 연산 가능!
 -- * 오늘날짜 : SYSDATE
 SELECT EMP_NAME, HIRE_DATE, SYSDATE - HIRE_DATE
@@ -212,7 +212,7 @@ FROM EMPLOYEE
 WHERE SALARY >= 3000000;
 
 -- 2. 연봉이 5000만원 이상인 사원들의 사원명, 급여, 연봉, 부서코드 조회
-SELECT EMP_NAME, SALARY, SALARY*12 AS "연봉", DEPT_CODE
+SELECT EMP_NAME, SALARY, SALARY * 12 AS "연봉", DEPT_CODE
 FROM EMPLOYEE
 WHERE SALARY * 12 >= 50000000; -- WHERE 절에서는 SELECT절에서 사용된 별칭 사용 불가!!
 
@@ -292,7 +292,6 @@ WHERE HIRE_DATE BETWEEN '90/01/01' AND '01/01/01';
         비교대상컬럼 LIKE '__문자'      => 비교대상의 컬럼값에 문자앞에 무조건 두글자가 올 경우 조회
         비교대상컬럼 LIKE '_문자_'      => 비교대상의 컬럼값에 문자 앞과 문자 뒤에 무조건 한글자씩 올 경우
         
-    
 */
 
 -- 사원들 중 성이 전씨인 사원들의 사원명, 급여, 입사일 조회
@@ -323,7 +322,7 @@ FROM EMPLOYEE
 WHERE PHONE LIKE '__1%';
 
 -- ** 특이케이스
--- 이메일 중 _ 기준으로 앞글자가 3글자인 사원들의 사번, 이름, 이멩리 조회
+-- 이메일 중 _ 기준으로 앞글자가 3글자인 사원들의 사번, 이름, 이메일 조회
 -- EX) sim_bs@kh.com 등등
 
 SELECT EMP_ID, EMP_NAME, EMAIL
@@ -461,7 +460,7 @@ WHERE (SALARY >= 2000000 AND SALARY <= 5000000) AND (HIRE_DATE >= '01/01/01') AN
 -- 5. 보너스 포함 연봉이 NULL이 아니고 이름에 '하'가 포함되어 있는 사원들의 (사번, 사원명, 급여, 보너스 포함연봉) 조회
 SELECT EMP_ID AS "사번", EMP_NAME AS "사원명", SALARY AS "급여", ((SALARY)+ BONUS* SALARY) *12 AS "보너스포함연봉"
 FROM EMPLOYEE
-WHERE (((SALARY)+ BONUS* SALARY) *12 IS NOT NULL) AND EMP_NAME LIKE '%하%';
+WHERE (((SALARY)+ BONUS * SALARY) * 12 IS NOT NULL) AND EMP_NAME LIKE '%하%';
 -- 쿼리 실행 순서 때문에 WHERE에 별칭 못씀
 
 SELECT EMP_ID, EMP_NAME, SALARY --3
@@ -478,7 +477,7 @@ WHERE DEPT_CODE IS NULL; --2
     SELECT 조회할 컬럼, 컬럼, 산술연산식 AS "별칭", ....
     FROM 조회하고자 하는 테이블명
     WHERE 조건식
-    ORDER BY 정렬하고싶은컬럼|별칭|컬럼순번 [ASC|DESC] [NULLS FIRST | NULLS LAST]
+    ORDER BY 정렬하고싶은컬럼|별칭|컬럼순번 [ ASC | DESC ] [ NULLS FIRST | NULLS LAST ]
     
     - ASC   : 오름차순 정렬 (생략시 기본값)
     - DESC  : 내림차순 정렬
