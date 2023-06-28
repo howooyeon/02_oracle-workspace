@@ -73,9 +73,10 @@ WHERE SALARY < (SELECT AVG(SALARY)
                 
 -- 2) 최저 급여를 받는 사원의 사번, 이름, 급여, 입사일
 SELECT EMP_ID, EMP_NAME, SALARY, HIRE_DATE
+FROM EMPLOYEE
 -- FROM EMPLOYEE = 전 직원들 중 최저 급여;
-WHERE SALARY = (SELECT MIN(SALARY))     
-                FROM EMPLOYEE); ///???
+WHERE SALARY = (SELECT MIN(SALARY)    
+                FROM EMPLOYEE);
                 
                 
 -- 3) 노옹철 사원의 급여보다 더 많은 사람들의 사번, 이름, 부서코드, 급여 조회
@@ -268,7 +269,7 @@ WHERE JOB_CODE IN (SELECT JOB_CODE
 SELECT EMP_NAME, DEPT_CODE, JOB_CODE, HIRE_DATE
 FROM EMPLOYEE
 WHERE (DEPT_CODE, JOB_CODE) = (SELECT DEPT_CODE, JOB_CODE
-                                FROM EMPLOYEE)
+                                FROM EMPLOYEE
                                 WHERE EMP_NAME = '하이유'); -- 순서 중요함! 개수 맞춰야함
                                 
 -- 박나라 사원과 같은 직급코드, 같은 사수를 가지고 있는 사원들의 사번, 사원명, 직급코드, 사수사번 조회
@@ -307,7 +308,7 @@ SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE
 WHERE (DEPT_CODE, SALARY) IN (SELECT DEPT_CODE, MAX(SALARY)
                                 FROM EMPLOYEE
-                                GROUP BY DEPT_CODE); ---??
+                                GROUP BY DEPT_CODE);
 --------------------------------------------------------------------------------
 /*
     5. 인라인 뷰(INLINE - VIEW)

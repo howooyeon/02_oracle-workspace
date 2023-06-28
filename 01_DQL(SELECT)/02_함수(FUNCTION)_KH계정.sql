@@ -425,12 +425,12 @@ SELECT TO_NUMBER('10,000,000', '99,999,999') + TO_NUMBER('55,000','99,999') FROM
     <NULL 처리 함수>
     
 */
--- NVL(컬럼, 해당 걸럼이 NULL일 경우 반환할 값)
+-- NVL(컬럼, 해당 컬럼이 NULL일 경우 반환할 값)
 SELECT EMP_NAME, BONUS, NVL(BONUS, 0)
 FROM EMPLOYEE;
 
 -- 전 사원의 이름 보너스 포함 연봉
-SELECT EMP_NAME, (SALARY + SALARY * BONUS) * 12, (SALARY + SALARY * NVL (BONUS,0)) * 12
+SELECT EMP_NAME, (SALARY + SALARY * BONUS) * 12, (SALARY + SALARY * NVL (BONUS, 0)) * 12
 FROM EMPLOYEE;
 
 SELECT DEPT_CODE, NVL(DEPT_CODE, '부서없음')
@@ -508,8 +508,8 @@ FROM EMPLOYEE;
 -------------------------------------< 그룹합수 >--------------------------------
 -- 1. SUM(숫자타입컬럼) : 해당 컬럼값들의 총 합계를 구해서 반환해주는 함수
 
--- EMPLOYEE 테이블의 전 사원의 급여함
-SELECT SUM(SALARY), EMP_NAME
+-- EMPLOYEE 테이블의 전 사원의 급여합
+SELECT SUM(SALARY)
 FROM EMPLOYEE; -- 전체 사원이 한 그룹으로 묶임
 
 -- 남자 사원들의 총 급여 합
@@ -557,7 +557,7 @@ SELECT COUNT(DEPT_CODE)
 FROM EMPLOYEE;
 
 -- 현재 사원들이 몇개의 부서에 분포되어있는지
-SELECT COUNT (DISTINCT DEPT_CODE)
+SELECT COUNT (DISTINCT DEPT_CODE) -- DISTINCT 중복 제거
 FROM EMPLOYEE;
 
 
