@@ -8,10 +8,10 @@
     
     관계형 데이터베이스는 최소한의 데이터로 각각의 테이블에 데이터를 담고 있음 (중복 최소화하기 위해 최대한 쪼개서 관리함)
     
-    -- 어떤 사원이 어떤 부서에 속해있는지 궁금함! 코드말고.. 이름으로//
+    -- 어떤 사원이 어떤 부서에 속해있는지 궁금함! 코드말고.. 이름으로..
     
     => 관계형 데이터베이스에서 SQL문을 이용한 테이블간의 "관계"를 맺는 방법
-       ( 무작정 다 조회를 해오는게 아니라 각 테이블간 연결고리로써의 데이터를 매칭해서 조회시켜야함!!! )
+    ( 무작정 다 조회를 해오는게 아니라 각 테이블간 연결고리로써의 데이터를 매칭해서 조회시켜야함!!! )
        
             JOIN 크게 "오라클 전용구문"과 "ANSI 구문" (ANSI == 미국국립표준협회) <= 아스크코드표 만드는 단체
                                         [JOIN 용어 정리]
@@ -25,7 +25,7 @@
              (LEFT OUTER)                        |   오른쪽 외부 조인 (RIGHT OUTER JOIN)
              (RIGHT OUTER)                       |   전체 외부 조인 (FULL OUTER JOIN)
       ---------------------------------------------------------------------------------------------
-            자체조인 (SELF JOIN)                  | JOIN ON
+            자체조인 (SELF JOIN)                  |                 JOIN ON
             비등가 조인(NON EQUAL JOIN)           |
       ---------------------------------------------------------------------------------------------
       
@@ -53,8 +53,8 @@ FROM JOB;
 */
 
 -- >> 오라클 전용구문
---     FROM절에 조회하고자 하는 테이블들을 나열 (, 구분자로)
---      WHERE절에 매칭시킬 컬럼(연결고리)에 대한 조건을 제시함
+--     FROM 절에 조회하고자 하는 테이블들을 나열 (, 구분자로)
+--     WHERE 절에 매칭시킬 컬럼(연결고리)에 대한 조건을 제시함
 
 -- 1) 연결한 두 컬럼명이 다른 경우(EMPLOYEE : DEPT_CODE, DEPARTMENT : DEPT_ID)
 -- 1) 사번, 사원명, 부서코드, 부서명을 같이 조회
@@ -69,7 +69,7 @@ WHERE DEPT_CODE = DEPT_ID;
 SELECT EMP_ID, EMP_NAME, JOB_CODE
 FROM EMPLOYEE, JOB
 WHERE JOB_CODE = JOB_CODE;
--- ambigously : 애매한, 모호한
+-- 오류발생 : ambigously 애매한, 모호한
 
 -- 1) 해결방법
 SELECT EMP_ID, EMP_NAME, EMPLOYEE.JOB_CODE, JOB_NAME
@@ -80,8 +80,6 @@ WHERE EMPLOYEE.JOB_CODE = JOB.JOB_CODE;
 SELECT EMP_ID, EMP_NAME, E.JOB_CODE, JOB_NAME
 FROM EMPLOYEE E, JOB J
 WHERE E.JOB_CODE = J.JOB_CODE;
-
-
 
 -- >> ANSI 구문
 -- FROM절에 기준이 되는 테이블을 하나 기술한 후
@@ -107,7 +105,7 @@ SELECT EMP_ID, EMP_NAME, E.JOB_CODE, J.JOB_NAME
 FROM EMPLOYEE E
 JOIN JOB J ON (E.JOB_CODE = J.JOB_CODE);
 
--- 해결방법 2) JOIN USING 구문 사용하는 방법 (두 컬럼명이 일치할 때만 사용 가능)
+-- 해결방법 2) JOIN ** USING 구문 사용하는 방법 (두 컬럼명이 일치할 때만 사용 가능)
 SELECT EMP_ID, EMP_NAME, JOB_CODE, JOB_NAME
 FROM EMPLOYEE
 JOIN JOB USING(JOB_CODE);
@@ -153,6 +151,9 @@ FROM DEPARTMENT, LOCATION
 WHERE LOCATION_ID = LOCAL_CODE;
 
 -- >> ANSI 구문
+SELECT DEPT_ID, DEPT_TITLE, LOCATION_ID, LOCAL_NAME
+FROM DEPARTMENT
+JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE);
 
 -- 3. 보너스를 받는 사원들의 사번, 사원명, 보너스, 부서명 조회
 -- >> 오라클 전용 구문
@@ -341,25 +342,25 @@ SELECT * FROM EMPLOYEE;     -- DEPT_CODE
 SELECT * FROM DEPARTMENT;   -- DEPT_TITLE      LOCATION_ID
 SELECT * FROM LOCATION;     --              LOCAL_CODE      NATIONAL_CODE
 SELECT * FROM JOB;          -- JOB_CODE
-SELECT * FROM NATIONAL; 
+SELECT * FROM NATIONAL;     -- NATIONAL_CODE
 
 -- >> 오라클 전용구문
 SELECT EMP_ID, EMP_NAME, DEPT_TITLE, JOB_NAME, LOCAL_NAME, NATIONAL_NAME, MAX_SAL
-FROM EMPLOYEE E, DEPARTMENT D, JOB J, LOCATION L, NATIONAL N, SAL_GRADE S
+FROM EMPLOYEE E, DEPARTMENT D, JOB, LOCATION L, NATIONAL N, SAL_GRADE
 WHERE E.DEPT_CODE = D.DEPT_ID
-AND E.DEPT_CODE = D.DEPT_ID
-AND NATIONLAL_CODE = N.NATIONAL_NAME
-AND LOCATION_ID = LOCAL_CODE;
+AND L.NATIONAL_CODE = N.NATIONAL_CODE
+AND D.LOCATION_ID = L.LOCAL_CODE;
 
 -- >> ANSI
 SELECT EMP_ID, EMP_NAME, DEPT_TITLE, JOB_NAME, LOCAL_NAME, NATIONAL_NAME, MAX_SAL
-FROM EMPLOYEE E
-JOIN DEPARTMENT D ON (E.DEPT_CODE = D.DEPT_ID)
-JOIN JOB J USING(JOB_CODE)
-JOIN LOCATION L ON(D.LOCTAION_ID = L.LOCAL_CODE)
-JOIN NATIONAL N USING (N.NATIONAL_CODE)  ..???
-JOIN SAL_GRADE S USING(SAL_LEVEL);
+FROM EMPLOYEE
+JOIN DEPARTMENT D ON (DEPT_CODE = DEPT_ID)
+JOIN JOB USING(JOB_CODE)
+JOIN LOCATION L ON (D.LOCATION_ID = L.LOCAL_CODE)
+JOIN NATIONAL N USING(NATIONAL_CODE)
+JOIN SAL_GRADE USING(SAL_LEVEL);
 
+-- only simple column names allowed here
 
 
 

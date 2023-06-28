@@ -3,8 +3,8 @@
 /*
 
     <GROUP BY 절>
-    그룹기준을 제시할 수 있는 구문(해당 그룹 기준별로 여러그룹을 묶을 수 있음)
-    여러개의 값들을 하나의 그룹으로 묶어서 처리할 목적으로 사용
+    그룹기준을 제시할 수 있는 구문(해당 그룹 기준별로 여러 그룹을 묶을 수 있음)
+    여러 개의 값들을 하나의 그룹으로 묶어서 처리할 목적으로 사용
 
 */
 
@@ -18,6 +18,11 @@ GROUP BY DEPT_CODE;
 
 -- 각 부서별 사원수
 SELECT DEPT_CODE, COUNT(*), SUM(SALARY)
+FROM EMPLOYEE
+GROUP BY DEPT_CODE;
+
+-- NVL 활용
+SELECT NVL(DEPT_CODE,'부서배정X'), COUNT(*), SUM(SALARY)
 FROM EMPLOYEE
 GROUP BY DEPT_CODE;
 
@@ -56,7 +61,7 @@ ORDER BY 1;
 --------------------------------------------------------------------------------
 /*
     <HAVING 절>
-    그룹에 대한 조건을 제시할 때 사용되는 구문(주로 그룹함수식을 가지고 조건을 제시할 때 사용)
+    그룹에 대한 조건을 제시할 때 사용되는 구문(주로 그룹 함수식을 가지고 조건을 제시할 때 사용)
 */
 
 -- 각 부서별 평균 급여 조회(부서코드, 평균급여)
@@ -71,6 +76,7 @@ FROM EMPLOYEE
 WHERE AVG(SALARY) >= 3000000
 GROUP BY DEPT_CODE; -- 오류발생(그룹함수 가지고 조건 제시시 WHERE 절에서 안됨)
 
+-- !!! 그룹으로 묶었을 때 (GROUP BY) WHERE로 조건 제시X HAVING 써야됨 !!!
 SELECT DEPT_CODE, AVG(SALARY)--4
 FROM EMPLOYEE --1
 GROUP BY DEPT_CODE --2
@@ -205,6 +211,5 @@ WHERE SALARY > 3000000;
 SELECT EMP_ID, EMP_NAME, DEPT_CODE, SALARY
 FROM EMPLOYEE
 WHERE DEPT_CODE = 'D5' AND SALARY <= 3000000;
-
 
 
