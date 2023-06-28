@@ -18,15 +18,15 @@
                                         
             오라클 전용구문                       |                  ANSI 구문
       --------------------------------------------------------------------------------------------
-              등가 조인                          |   내부 조인( [INNER] JOIN ) => JOIN USING / ON
-            [EQUAL JOIN]                        |   자연 조인( NATUAL JOIN) => JOIN USING
+              등가 조인                           |   내부 조인( [INNER] JOIN ) => JOIN USING / ON
+            [EQUAL JOIN]                         |   자연 조인( NATUAL JOIN) => JOIN USING
       --------------------------------------------------------------------------------------------
                 포괄조인                          |   왼쪽 외부조인 ( LEFT OUTER JOIN )
-            (LEFT OUTER)                        |   오른쪽 외부 조인 (RIGHT OUTER JOIN)
-            (RIGHT OUTER)                        |   전체 외부 조인 (FULL OUTER JOIN)
+             (LEFT OUTER)                        |   오른쪽 외부 조인 (RIGHT OUTER JOIN)
+             (RIGHT OUTER)                       |   전체 외부 조인 (FULL OUTER JOIN)
       ---------------------------------------------------------------------------------------------
-                자체조인 (SELF JOIN)               | JOIN ON
-                비등가 조인(NON EQUAL JOIN)         |
+            자체조인 (SELF JOIN)                  | JOIN ON
+            비등가 조인(NON EQUAL JOIN)           |
       ---------------------------------------------------------------------------------------------
       
 */
