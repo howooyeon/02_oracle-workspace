@@ -205,10 +205,20 @@ WHERE TERM_NO = '200402' AND CLASS_NO = 'C3118100'
 ORDER BY POINT DESC, STUDENT_NO ASC;
 
 -- 6. 학생 번호, 학생 이름, 학과 이름을 학생 이름으로 오름차순 정렬하여 출력하는 SQL 문을 작성하시오.
+SELECT STUDENT_NO, STUDENT_NAME, DEPARTMENT_NAME
+FROM TB_STUDENT
+JOIN TB_DEPARTMENT USING (DEPARTMENT_NO)
+ORDER BY 2;
 
 -- 7. 춘 기술대학교의 과목 이름과 과목의 학과 이름을 출력하는 SQL 문장을 작성하시오.
+SELECT CLASS_NAME, DEPARTMENT_NAME
+FROM TB_CLASS
+JOIN TB_DEPARTMENT USING (DEPARTMENT_NO);
 
 -- 8. 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을작성하시오.
+SELECT CLASS_NAME, PROFESSOR_NAME
+FROM TB_CLASS C, TB_PROFESSOR P
+WHERE C.DEPARTMENT_NO = P.DEPARTMENT_NO
 
 -- 9. 8 번의 결과 중 ‘인문사회’ 계열에 속한 과목의 교수 이름을 찾으려고 한다. 이에 해당하는 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
 
