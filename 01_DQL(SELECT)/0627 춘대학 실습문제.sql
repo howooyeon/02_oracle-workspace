@@ -257,6 +257,15 @@ WHERE DEPARTMENT_NAME = '음악학과'; --????????????????
 
 -- 15. 휴학생이 아닌 학생 중 평점이 4.0 이상인 학생을 찾아 그 학생의 학번, 이름, 학과
 -- 이름, 평점을 출력하는 SQL 문을 작성하시오.
+SELECT * FROM TB_STUDENT;  --DEPARTMENT_NO   STUDENT_NO
+SELECT * FROM TB_DEPARTMENT; --DEPARTMENT_NO
+SELECT * FROM TB_GRADE; -- STUDENT_NO
+
+SELECT STUDENT_NO, STUDENT_NAME, DEPARTMENT_NAME, POINT
+FROM TB_STUDENT
+JOIN TB_CLASS USING (DEPARTMENT_NO)
+JOIN TB_DEPARTMENT USING (DEPARTMENT_NO)
+JOIN TB_GRADE USING (STUDENT_NO);  -----?????????
 
 -- 16. 환경조경학과 전공과목들의 과목 별 평점을 파악할 수 있는 SQL 문을 작성하시오.
 
