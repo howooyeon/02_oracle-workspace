@@ -237,7 +237,7 @@ AND CATEGORY = '인문사회';
 SELECT STUDENT_ID, STUDENT_NAME, AVG(COUNT(POINT))
 FROM TB_STUDENT
 JOIN TB_GRADE USING (STUDENT_NO)
-WHERE DEPARTMENT_NAME = '음악학과';
+WHERE DEPARTMENT_NAME = '음악학과'; --????????????????
 
 -- 11. 학번이 A313047 인 학생이 학교에 나오고 있지 않다. 지도 교수에게 내용을 전달하기 위한
 -- 학과 이름, 학생 이름과 지도 교수 이름이 필요하다. 이때 사용한 SQL 문을

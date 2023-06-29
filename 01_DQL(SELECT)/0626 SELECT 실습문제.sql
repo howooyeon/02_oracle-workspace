@@ -103,6 +103,30 @@ FROM EMPLOYEE;
 
 -- 22. EMPLOYEE테이블에서 부서코드가 D5, D6, D9인 사원만 조회하되 D5면 총무부, D6면 기획부, D9면 영업부로 처리
 --  (단, 부서코드 오름차순으로 정렬)
+SELECT EMP_NAME 직원명
+     , CASE WHEN DEPT_CODE = 'D5' THEN '총무부'
+            WHEN DEPT_CODE = 'D6' THEN '기획부'
+            WHEN DEPT_CODE = 'D9' THEN '영업부'
+       END 부서명   
+FROM EMPLOYEE
+WHERE DEPT_CODE IN('D5','D6','D9')
+ORDER BY DEPT_CODE;
+/*
+SELECT EMP_NAME,
+DECODE (DEPT_CODE,'D5','총무부',
+                  'D6','기획부',
+                  'D9','영업부') AS "부서"
+FROM EMPLOYEE
+WHERE DEPT_CODE IS NOT NULL
+ORDER BY DEPT_CODE;
+*/
+
+SELECT EMP_NAME, JOB_CODE, SALARY,
+        DECODE(JOB_CODE, 'J7', SALARY * 1.1,
+                         'J6', SALARY * 1.15,
+                         'J5', SALARY * 1.2,
+                        SALARY * 1.05) AS "인상된 급여"
+FROM EMPLOYEE;
 
 
 
@@ -122,9 +146,9 @@ WHERE DEPT_CODE = 'D5';
 
 -- 25. EMPLOYEE테이블에서 직원들의 입사일로부터 년도만 가지고 각 년도별 입사 인원수 조회
 --  전체 직원 수, 2001년, 2002년, 2003년, 2004년
-SELECT COUNT(DECODE(TO_CHAR(HIRE_DATE,'YYYY'),'2001',1))||'명' "2001년"
+SELECT COUNT(TO_CHAR(HIRE_DATE,'YYYY'))||'명' "전체직원수" 
+     , COUNT(DECODE(TO_CHAR(HIRE_DATE,'YYYY'),'2001',1))||'명' "2001년"
      , COUNT(DECODE(TO_CHAR(HIRE_DATE,'YYYY'),'2002',1))||'명' "2002년"
      , COUNT(DECODE(TO_CHAR(HIRE_DATE,'YYYY'),'2003',1))||'명' "2003년"
      , COUNT(DECODE(TO_CHAR(HIRE_DATE,'YYYY'),'2004',1))||'명' "2004년" 
-     , COUNT(TO_CHAR(HIRE_DATE,'YYYY'))||'명' "전체직원수" 
 FROM EMPLOYEE;

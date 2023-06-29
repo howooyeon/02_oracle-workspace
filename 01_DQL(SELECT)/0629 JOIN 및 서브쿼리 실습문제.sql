@@ -81,7 +81,7 @@ WHERE (BONUS IS NULL) AND (JOB_CODE IN ('J4', 'J7'));
 
 
 --10. 보너스 포함한 연봉이 높은 5명의 사번, 이름, 부서 명, 직급, 입사일, 순위 조회
-SELECT EMP_ID, EMP_NAME, DEPT_TITLE, JOB_NAME, HIRE_DATE, (SALARY + SALARY * NVL(BONUS, 0)) * 12
+SELECT EMP_ID, EMP_NAME, DEPT_TITLE, JOB_NAME, HIRE_DATE, ROWNUM
 FROM (SELECT *
         FROM EMPLOYEE
         JOIN JOB USING (JOB_CODE)
@@ -92,10 +92,26 @@ WHERE ROWNUM <= 5;
 
 
 --11. 부서 별 급여 합계가 전체 급여 총 합의 20%보다 많은 부서의 부서 명, 부서 별 급여 합계 조회
+--11-1. JOIN과 HAVING 사용 ... 어렵다
 
+SELECT DEPT_TITLE, SUM(SALARY)
+FROM EMPLOYEE
+LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
+GROUP BY DEPT_TITLE
+HAVING 1.2 * SUM(SALARY) > (SELECT MAX(SUM(SALARY))
+                            FROM EMPLOYEE
+                            GROUP BY DEPT_CODE);
 
---11-1. JOIN과 HAVING 사용
 --11-2. 인라인 뷰 사용
+SELECT DEPT_TITLE, 합
+FROM(SELECT DEPT_TITLE, SUM(SALARY) AS "합"
+        FROM EMPLOYEE
+        LEFT JOIN DEPARTMENT ON (DEPT_CODE = DEPT_ID)
+        GROUP BY DEPT_TITLE)
+WHERE 1.2 * 합 > (SELECT MAX(SUM(SALARY))
+                            FROM EMPLOYEE
+                            GROUP BY DEPT_CODE);       
+
 
 --12. 부서 명과 부서 별 급여 합계 조회
 SELECT DEPT_TITLE, SUM(SALARY)
