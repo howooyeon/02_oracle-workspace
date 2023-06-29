@@ -102,7 +102,8 @@ FROM EMPLOYEE;
 
 
 -- 22. EMPLOYEE테이블에서 부서코드가 D5, D6, D9인 사원만 조회하되 D5면 총무부, D6면 기획부, D9면 영업부로 처리
---  (단, 부서코드 오름차순으로 정렬) 푸는거 아님
+--  (단, 부서코드 오름차순으로 정렬)
+
 
 
 -- 23. EMPLOYEE테이블에서 사번이 201번인 사원명, 주민번호 앞자리, 주민번호 뒷자리, 
@@ -113,11 +114,11 @@ WHERE EMP_ID = '201';
 
 
 -- 24. EMPLOYEE테이블에서 부서코드가 D5인 직원의 보너스 포함 연봉 합 조회
-/*
-SELECT ((SALARY * BONUS) + SALARY) AS 보너스포함연봉
+
+SELECT COUNT(((SALARY * BONUS) + SALARY)) AS "보너스포함연봉 합"
 FROM EMPLOYEE
-WHERE DEPT_CODE = 'D5'; 푸는 게 아님
-*/
+WHERE DEPT_CODE = 'D5';
+
 
 -- 25. EMPLOYEE테이블에서 직원들의 입사일로부터 년도만 가지고 각 년도별 입사 인원수 조회
 --  전체 직원 수, 2001년, 2002년, 2003년, 2004년

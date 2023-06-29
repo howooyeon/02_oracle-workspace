@@ -166,8 +166,10 @@ GROUP BY STUDENT_NAME
 HAVING COUNT(*) > 1;
 
 
--- 15. 학번이 A112113 인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점 , 총
+-- 15. 학번이 A112113 인 김고운 학생의 년도, 학기 별 평점과 년도 별 누적 평점, 총
 -- 평점을 구하는 SQL 문을 작성하시오. (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.)
+
+-- ROLLUP 함수 찾아서 통계 내주는...
 
 
 -- 1. 학생 이름과 주소지를 표시하시오. 단, 출력 헤더는 "학생 이름", "주소지"로 하고,
@@ -217,20 +219,34 @@ JOIN TB_DEPARTMENT USING (DEPARTMENT_NO);
 
 -- 8. 과목별 교수 이름을 찾으려고 한다. 과목 이름과 교수 이름을 출력하는 SQL 문을작성하시오.
 SELECT CLASS_NAME, PROFESSOR_NAME
-FROM TB_CLASS C, TB_PROFESSOR P
-WHERE C.DEPARTMENT_NO = P.DEPARTMENT_NO
+FROM TB_CLASS C, TB_CLASS_PROFESSOR CP, TB_PROFESSOR P
+WHERE CP.PROFESSOR_NO = P.PROFESSOR_NO
+AND CP.CLASS_NO = C.CLASS_NO;
+
 
 -- 9. 8 번의 결과 중 ‘인문사회’ 계열에 속한 과목의 교수 이름을 찾으려고 한다. 이에 해당하는 과목 이름과 교수 이름을 출력하는 SQL 문을 작성하시오.
-
+SELECT CLASS_NAME, PROFESSOR_NAME
+FROM TB_CLASS C, TB_CLASS_PROFESSOR CP, TB_PROFESSOR P, TB_DEPARTMENT D
+WHERE CP.PROFESSOR_NO = P.PROFESSOR_NO
+AND CP.CLASS_NO = C.CLASS_NO
+AND C.DEPARTMENT_NO = D.DEPARTMENT_NO
+AND CATEGORY = '인문사회';
 
 -- 10. ‘음악학과’ 학생들의 평점을 구하려고 한다. 음악학과 학생들의 "학번", "학생 이름", 
 -- "전체 평점"을 출력하는 SQL 문장을 작성하시오. (단, 평점은 소수점 1 자리까지만 반올림하여 표시한다.)
+SELECT STUDENT_ID, STUDENT_NAME, AVG(COUNT(POINT))
+FROM TB_STUDENT
+JOIN TB_GRADE USING (STUDENT_NO)
+WHERE DEPARTMENT_NAME = '음악학과';
 
 -- 11. 학번이 A313047 인 학생이 학교에 나오고 있지 않다. 지도 교수에게 내용을 전달하기 위한
 -- 학과 이름, 학생 이름과 지도 교수 이름이 필요하다. 이때 사용한 SQL 문을
 -- 작성하시오. 단, 출력헤더는 ?학과이름?, ?학생이름?, ?지도교수이름?으로 출력되도록 한다.
 
 -- 12. 2007 년도에 '인간관계론' 과목을 수강한 학생을 찾아 학생이름과 수강 학기를 표시하는 SQL 문장을 작성하시오.
+
+
+
 
 -- 13. 예체능 계열 과목 중 과목 담당교수를 한 명도 배정받지 못헌 과목을 찾아 그 과목
 -- 이름과 학과 이름을 출력하는 SQL 문장을 작성하시오.
