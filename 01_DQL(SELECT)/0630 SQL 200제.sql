@@ -132,14 +132,26 @@ SELECT ENAME, REPLACE(SAL, 0, '*')
 FROM EMP;
 
 -- 30. TEST_ENAME 이라는 테이블 생성 (컬럼 1개 : ENAME VARCHAR2(10))
+CREATE TABLE TEST_ENAME(
+    ENAME VARCHAR2(10)
+);
 
 -- 31. TEST_ENAME 이라는 테이블에 3개의 샘플데이터 넣기 (김시연, 차은우, 주지훈)
+INSERT INTO TEST_ENAME VALUES('김시연');
+INSERT INTO TEST_ENAME VALUES('차은우');
+INSERT INTO TEST_ENAME VALUES('주지훈');
+
 -- 32. COMMIT; 실행
+COMMIT;
+
 -- 33. 이름의 두번째 자리의 한글을 *로 출력 (김*연, 차*우, 주*훈)
 SELECT ENAME, REPLACE(ENAME, SUBSTR(ENAME, 2,1), '*')
-FROM EMP;
+FROM TEST_ENAME;
 
 -- 34. 이름과 월급을 출력하는데 월급컬럼의 자리수를 10자리로 하여 월급 출력하고, 남은자리는 *로 채워서 출력
+SELECT ENAME, TO_NUMBER(SAL, '999,999,999')
+FROM EMP; --????????
+
 -- 35. 첫번째 컬럼은 smith 철자를 출력하고, 두번째 컬럼은 영어단어 smith에서 s를 잘라서 출력하고, 세번째 컬럼은 smith에서 h잘라서 출력하고
 --     네번째 컬럼은 영어단어 smiths의 양쪽 s를 제거하여 출력 ( smith, mith, smit, mith ) =>  배웠던 함수 활용
 -- 36. 이름이 JACK인 사원의 이름과 월급을 조회 = >안나옴.. 왜안나올까? 공백이있음 => 나오게 출력 
@@ -164,10 +176,16 @@ SELECT ENAME, NVL(COMM,0)
 FROM EMP;
 
 -- 63. 사원번호와 사원번호가 짝수인지 홀수인지 출력 (7839, 홀수)
+SELECT EMPNO -----???????????
+FROM EMP;
 -- 64. 사원의 이름과 직업과 보너스를 출력. 직업이 SALESMAN이면 보너스를 5000이라고 출력하고 그 외는 2000이라고 출력 
 -- 65. 이름, 직업,월급, 보너스 출력. 보너스는 월급이 3000이상이면 500. 2000이상~3000 보다 작으면 300. 월급이 1000이상~2000 보다 작으면 200 나머지는 0 => CASE WHEN THEN 구문
 -- 66. 직업이 SALESMAN인 사원들 중 최대월급 출력
+SELECT SAL
+FROM EMP
+WHERE JOB = 'SALESMAN';
 -- 67. 각 부서별 최대 급여 출력
+
 -- 68. 직업, 직업별 최소 월급 출력. 단, SALESMAN은 제외하고, 직업별 최소월급이 높은것 부터 출력
 -- 69. 직업과 직업별 월급의 총합을 출력. 단, SALESMAN은 제외하고,  총월급이 4000 이상인 직업만 출력
 -- 70. 직업이 ANALYST, MANAGER 인 사원들의 이름, 직업, 월급, 월급의 순위 출력 (1위가 2명일시 다음은 바로 3위)
