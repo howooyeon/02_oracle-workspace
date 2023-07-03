@@ -169,9 +169,10 @@ SELECT ROUND(876.567, 2) FROM DUAL;
 -- 38. 876.567 숫자 출력시 소수점 두 번째 자리인 6과 그 이후의 숫자들을 모두 버리고 출력
 -- 39. 숫자 10을 3으로 나눈 나머지값 구하기
 SELECT MOD(10, 3) FROM DUAL;
-XD
+
 -- 40. 이름을 출력하고 입사한 날짜부터 오늘까지 총 몇달을 근무했는지 출력
-SELECT ENAME
+SELECT ENAME, CEIL (MONTHS_BETWEEN(SYSDATE, HIREDATE)) || '개월'
+FROM EMP;
 
 -- 50. 2023년 6월 30일로부터 100달 뒤의 날짜는 어떻게 되는지 출력
 -- 51. 2023년 1월 1일 부터 바로 돌아올 월요일의 날짜가 어떻게 되는지 출력
@@ -190,26 +191,81 @@ SELECT ENAME, NVL(COMM,0)
 FROM EMP;
 
 -- 63. 사원번호와 사원번호가 짝수인지 홀수인지 출력 (7839, 홀수)
-SELECT EMPNO -----???????????
+SELECT EMPNO,
+    CASE WHEN MOD(EMPNO, 2) = '0' THEN '짝수'
+         ELSE '홀수'
+         END AS "짝수? 홀수?"
 FROM EMP;
--- 64. 사원의 이름과 직업과 보너스를 출력. 직업이 SALESMAN이면 보너스를 5000이라고 출력하고 그 외는 2000이라고 출력 
-SELECT ENAME, JOB
-FROM EMP; -----??????????????
--- 65. 이름, 직업, 월급, 보너스 출력. 보너스는 월급이 3000이상이면 500. 2000이상~3000 보다 작으면 300. 월급이 1000이상~2000 보다 작으면 200 나머지는 0 => CASE WHEN THEN 구문
 
+-- 64. 사원의 이름과 직업과 보너스를 출력. 직업이 SALESMAN이면 보너스를 5000이라고 출력하고 그 외는 2000이라고 출력 
+SELECT ENAME, JOB,
+    CASE WHEN JOB = 'SALESMAN' THEN '5000'
+        ELSE '2000'
+        END AS "보너스"
+FROM EMP;
+
+-- 65. 이름, 직업, 월급, 보너스 출력. 보너스는 월급이 3000이상이면 500. 2000이상~3000 보다 작으면 300. 월급이 1000이상~2000 보다 작으면 200 나머지는 0 => CASE WHEN THEN 구문
+SELECT ENAME, JOB, SAL,
+    CASE
+        WHEN SAL >= 3000 THEN '500'
+        WHEN SAL >= 2000 AND SAL < 3000 THEN '300'
+        WHEN SAL >= 1000 AND SAL < 2000 THEN '200'
+        ELSE '0'
+    END AS "보너스"
+FROM EMP;
 
 -- 66. 직업이 SALESMAN인 사원들 중 최대월급 출력
 SELECT MAX(SAL)
 FROM EMP
 WHERE JOB = 'SALESMAN';
+
 -- 67. 각 부서별 최대 급여 출력
+SELECT DEPTNO, MAX(SAL)
+FROM EMP
+GROUP BY DEPTNO;
 
 -- 68. 직업, 직업별 최소 월급 출력. 단, SALESMAN은 제외하고, 직업별 최소월급이 높은것 부터 출력
+SELECT JOB, MIN(SAL)
+FROM EMP
+WHERE JOB != 'SALESMAN'
+GROUP BY JOB
+ORDER BY 2 DESC;
+
 -- 69. 직업과 직업별 월급의 총합을 출력. 단, SALESMAN은 제외하고,  총월급이 4000 이상인 직업만 출력
+SELECT JOB, SUM(SAL)
+FROM EMP
+WHERE JOB != 'SALESMAN'
+AND SAL >= 4000
+GROUP BY JOB;
+
 -- 70. 직업이 ANALYST, MANAGER 인 사원들의 이름, 직업, 월급, 월급의 순위 출력 (1위가 2명일시 다음은 바로 3위)
+
+
 -- 71. 직업이 ANALYST, MANAGER 인 사원들의 이름, 직업, 월급, 월급의 순위 출력 (1위가 2명일시 다음은 바로 2위)
+
+
 -- 72. 사원테이블에서 사원번호, 이름, 직업, 월급을 출력. 단, 월급높은 상위 5개의 행만 출력
+SELECT EMPNO, ENAME, JOB
+    FROM (SELECT EMPNO, ENAME, JOB, RANK() OVER(ORDER BY SAL DESC) AS "순위"
+            FROM EMP)
+WHERE 순위 <= 5;
+
+
 -- 73. 사원테이블과 급여테이블을 조인하여 사원명, 급여, 급여등급 출력 (ANSI, ORACLE)
+SELECT ENAME, SAL, GRADE
+FROM EMP
+JOIN SALGRADE USING (DEPTNO); --????????????????
+
 -- 74. 사원테이블과 부서테이블을 조인하여 이름과 부서위치 출력(단, BOSTON 도 같이 출력되게 해볼 것)(ANSI, ORACLE)
+SELECT ENAME, LOC
+FROM EMP
+JOIN DEPT USING (DEPTNO); -- 보스턴이 안나옴
+
+
 -- 75. 사원 테이블을 셀프조인 하여 이름, 직업, 해당사원의 관리자 이름과 관리자의 직업 출력(ANSI, ORACLE)
--- 76. 사원테이블과 부서테이블 조인하여 이름, 직업,월급,부서위치 출력 (단, 사원명 JACK의 데이터와 부서위치 BOSTON의 데이터 둘다 나와야함)
+SELECT ENAME, JOB, MGR, MGR; -- 관리자의 직업 어케 구함
+
+-- 76. 사원테이블과 부서테이블 조인하여 이름, 직업, 월급, 부서위치 출력 (단, 사원명 JACK의 데이터와 부서위치 BOSTON의 데이터 둘다 나와야함)
+SELECT ENAME, JOB, SAL, LOC
+FROM EMP
+JOIN DEPT USING(DEPTNO); -- 보스턴이 안나옴
