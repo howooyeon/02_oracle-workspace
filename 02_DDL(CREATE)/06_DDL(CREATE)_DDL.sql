@@ -432,3 +432,11 @@ SELECT * FROM MEM_GRADE;
 INSERT INTO MEM
 VALUES(3, 'user03', 'pass03', '이승우', '남', null, null, 20);
 
+
+INSERT INTO MEM
+VALUES(4, 'user04', 'pass04', '안정환', null, null, null, 10); --??
+
+-- MEM_GRADE(부모테이블) MEM(자식테이블)
+-- 이때 부모테이블(MEM_GRADE) 에서 데이터 값을 삭제할 경우 어떤 문제가 발생할까?
+-- 데이터 삭제 : DELETE FROM 테이블명 WHERE 조건;
+
