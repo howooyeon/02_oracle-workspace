@@ -88,6 +88,10 @@ CREATE TABLE TEST (
 
 ROLLBACK;
 
+-- DDL문(CREATEM, ALTER, DROP)을 수행하는 순간 기존에 트렌잭션에 있던 변경사항들을
+-- 무조건 COMMIT(실제 DB 반영)
+-- 즉, DDL문 수행 전 변경사항이 있었다면 정확히 픽스(COMMIT, ROLLBACK) 하고 하자!!
+
 
 
 
