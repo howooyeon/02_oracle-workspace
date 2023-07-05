@@ -352,17 +352,77 @@ ROLLBACK;
     
 */
 
+-- 2) FORCE | NOFORCE
+--    NOFORCE : 서브쿼리에 기술된 테이블이 존재하는 테이블이어야만 뷰가 생성되게 하는 (생략시 기본값)
+CREATE OR REPLACE NOFORCE VIEW VW_EMP
+AS SELECT TCODE, TNAME, TCONTENT
+FROM TT;
+-- ORA-00942: table or view does not exist
+-- 해당 테이블 없어서 오류남!!
 
+-- FORCE : 서브쿼리에 기술된 테이블
+CREATE OR REPLACE FORCE VIEW VW_EMP
+AS SELECT TCODE, TNAME, TCONTENT
+FROM TT;
+-- 경고: 컴파일 오류와 함께 뷰가 생성되었습니다.
 
+SELECT * FROM VW_EMP; -- 조회는 안됨
+-- TT 테이블 생성해야만 그때부터 VIEW 활용 가능
 
+CREATE TABLE TT(
+    TCODE NUMBER, 
+    TNAME VARCHAR2(20),
+    TCONTENT VARCHAR2(30)
+);
 
+-- 3) WITH CHECK OPTION : 서브쿼리에 기술된 조건에 부합하지 않는 값으로 수정시 오류 발생
+--    WITH CHECK OPTION 안주고
+CREATE OR REPLACE VIEW VW_EMP
+AS SELECT * 
+    FROM EMPLOYEE
+    WHERE SALARY >= 3000000;
 
+SELECT * FROM VW_EMP; -- 8명 조회
 
+-- 200번 사원의 급여를 200만원으로 변경 (서브쿼리의 조건에 부합하지 않는 값으로 변경시도!) ==> 잘 변경됨!
+UPDATE VW_EMP
+SET SALARY = 2000000
+WHERE EMP_ID = 200;
 
+ROLLBACK;
 
+CREATE OR REPLACE VIEW VW_EMP
+AS SELECT * 
+    FROM EMPLOYEE
+    WHERE SALARY >= 3000000
+WITH CHECK OPTION;
 
+SELECT * FROM VW_EMP;
 
+UPDATE VW_EMP
+SET SALARY = 2000000
+WHERE EMP_ID = 200; -- 오류남
+-- 서브쿼리에 기술한 조건에 부합되지 않기 때문에 변경 불가
 
+UPDATE VW_EMP
+SET SALARY = 4000000
+WHERE EMP_ID = 200; -- 서브쿼리에 기술한 조건에 부합되기 때문에 변경 가능 300만 이상인데 400줘서 ㅇㅇ
+
+ROLLBACK;
+
+-- 4) WITH READ ONLY : 뷰에 대해 조회만 가능 (DML문 수행 불가)
+CREATE OR REPLACE VIEW VW_EMP
+AS SELECT EMP_ID, EMP_NAME, BONUS
+    FROM EMPLOYEE
+    WHERE BONUS IS NOT NULL
+WITH READ ONLY;
+
+SELECT * FROM VW_EMP; -- 9명 사원 조회
+
+DELETE FROM VW_EMP
+WHERE EMP_ID = 200;
+-- ORA-42399: cannot perform a DML operation on a read-only view
+-- 읽기 전용임
 
 
 
