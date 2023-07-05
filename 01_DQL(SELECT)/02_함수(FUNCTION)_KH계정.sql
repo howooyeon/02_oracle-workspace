@@ -18,7 +18,7 @@
     LENGTH (컬럼| '문자열값') : 해당 문자열 값의 글자수 반환
     LENGTHB(컬럼| '문자열값') : 해당 문자열 값의 BYTE수 반환
     
-    '김' , '나', 'ㄱ' 한 글자당 3BYTE
+    '김', '나', 'ㄱ' 한 글자당 3BYTE
     영문자, 숫자, 특문 한 글자당 1BYTE
 */
 
@@ -272,9 +272,9 @@ SELECT SYSDATE FROM DUAL;
 -- => 결과값은 NUMBER 타입
 -- EMPLOYEE에서 사원명, 입사일, 근무일수, 근무개월수
 
-SELECT EMP_NAME, HIRE_DATE, FLOOR(SYSDATE - HIRE_DATE) AS "근무일수",
+SELECT EMP_NAME, HIRE_DATE, FLOOR(SYSDATE - HIRE_DATE) || '일' AS "근무일수",
 CEIL (MONTHS_BETWEEN(SYSDATE, HIRE_DATE)) || '개월' AS "근무개월수"
-FROM EMPLOYEE; --?
+FROM EMPLOYEE;
 
 -- * ADD_MONTHS(DATE, NUMBER) : 특정날짜에 해당 숫자만큼 개월수를 더해서 날짜를 리턴
 -- => 결과값 : DATE 타입
@@ -292,6 +292,7 @@ SELECT SYSDATE, NEXT_DAY(SYSDATE, '금') FROM DUAL;
 -- 1. 일요일 .....
 SELECT SYSDATE, NEXT_DAY(SYSDATE, 5) FROM DUAL;
 SELECT SYSDATE, NEXT_DAY('20231120','FRIDAY') FROM DUAL; -- 현재 언어가 KOREAN이기 때문
+SELECT SYSDATE, NEXT_DAY('20231120','금') FROM DUAL;
 
 -- 언어 변경
 SELECT * FROM NLS_SESSION_PARAMETERS;
