@@ -242,7 +242,54 @@ BEGIN
 END;
 /
         
+--------------------------------------------------------------------------------
+-- 4) CASE 비교대상자 WHEN 동등비교할값1 THEN 결과값1 WHEN 비교값2 THEN 결과값2... ELSE 결과값 END;
+DECLARE
+    EMP EMPLOYEE%ROWTYPE;
+    DNAME VARCHAR2(30); -- 부서명 보관 변수
+    BEGIN
+    
+    SELECT *
+    INTO EMP
+    FROM EMPLOYEE
+    WHERE EMP_ID = &사번;
+    
+    DNAME := CASE EMP.DEPT_CODE
+                WHEN 'D1' THEN '인사팀'
+                WHEN 'D2' THEN '회계팀'
+                WHEN 'D3' THEN '마케팅팀'
+                WHEN 'D4' THEN '총무팀'
+                ELSE '해외영업팀'
+            END;
+            
+            DBMS_OUTPUT.PUT_LINE(EMP.EMP_NAME || '은(는)'|| DNAME || '입니다');
+    
+END;
+/
 
+-- 1. 사원의 연봉을 구하는 PL/SQL 블럭 작성, 보너스가 있는 사원은 보너스도 포함하여 계산
+-- 보너스가 없으면 보너스 미포함연봉
+-- 보너스가 있으면 보너스 포함 연봉
+-- 출력예시
+-- 급여 이름 \999,999,999 (8000000 선동일 \ 124,800,800)
+
+SALARY EMPLOYEE.SALARY% TYPE;
+    BONUS EMPLOYEE.BONUS%TYPE;
+BEGIN
+    SELECT EMP_ID, EMP_NAME, SALARY, NVL(BONUS, 0)
+    INTO EID, ENAME, SALARY, BONUS
+    FROM EMPLOYEE
+    WHERE EMP_ID = &사번;
+
+DECLARE
+   SALARY EMPLOYEE.SALARY%TYPE;
+   BONUS EMPLOYEE.BONUS%TYPE;
+    
+    BEGIN
+    SELECT *
+    INTO SAL
+    FROM EMPLOYEE
+    WHERE EMP_ID = &사번;
 
 
 
