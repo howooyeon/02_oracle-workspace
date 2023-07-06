@@ -476,16 +476,49 @@ CREATE TABLE TB_학생일반정보(
 SELECT * FROM TB_학생일반정보;
 
 -- 3. 국어국문학과 학생들의 정보만이 포함되어 있는 학과정보 테이블을 만들고자한다. 아래 내용을 참고하여 적절한 SQL문을 작성하시오
-
+CREATE TABLE TB_국어국문학과
+AS SELECT STUDENT_NO,
+          STUDENT_NAME,
+          '19' ||  (SUBSTR(STUDENT_SSN, 1, 2)) AS "출생년도",
+          PROFESSOR_NAME
+    FROM TB_STUDENT S
+    LEFT JOIN TB_PROFESSOR P ON (S.COACH_PROFESSOR_NO = P.PROFESSOR_NO)
+    JOIN TB_DEPARTMENT D ON (D.DEPARTMENT_NO = S.DEPARTMENT_NO)
+    WHERE D.DEPARTMENT_NAME = '국어국문학과';
+    
+    DROP TABLE TB_국어국문학과;
+    
 -- 4. 현 학과들의 정원을 10% 증가시키게 되었다. 이에 사용할 SQL문을 작성하시오
 -- 단, 반올림을 사용하여 소수점 자릿수는 생기지 않도록 한다.
+UPDATE TB_DEPARTMENT
+SET CAPACITY = (CAPACITY * 0.1 + CAPACITY);
 
 -- 5. 학번 A413042인 박건우 학생의 주소가 서울시 종로구 숭인동 181-21로 변경되었다고 한다.
 -- 주소지를 정정하기 위해 사용할 SQL문을 작성하시오
+UPDATE TB_STUDENT
+SET STUDENT_ADDRESS = '서울시 종로구 숭인동 181-21'
+WHERE STUDENT_NO = 'A413042';
 
--- 6. 주민등록번호 보호법에 따라 학생정보 테이블에서 주민번호 뒷자리를 저장하지 않기로 결정하였다. 이 내용을 반영할 적절한 SQL문을 작성하시오
+-- 6. 주민등록번호 보호법에 따라 학생정보 테이블에서 주민번호 뒷자리를 저장하지 않기로 결정하였다. 
+-- 이 내용을 반영할 적절한 SQL문을 작성하시오
+UPDATE TB_STUDENT
+SET STUDENT_SSN = SUBSTR(STUDENT_SSN, 1, 6);
 
--- 7. 의학과 김명훈 학생은 2005년 1학기에 자신이 수강한 피부생리학 점수가 잘못되었다는 것을 발견하고는 정정을 요청하였다. 담당 교수의 확인 받은 결과 해당 과목의 학점을 3.5로 변경키로 결정되었다.
+-- 7. 의학과 김명훈 학생은 2005년 1학기에 자신이 수강한 피부생리학 점수가 잘못되었다는 것을 발견하고는 정정을 요청하였다. 
+-- 담당 교수의 확인 받은 결과 해당 과목의 학점을 3.5로 변경키로 결정되었다.
+UPDATE TB_GRADE
+SET POINT = 3.5
+WHERE (STUDENT_NO, TERM_NO, CLASS_NO) = (SELECT STUDENT_NO, TERM_NO, CLASS_NO
+                                           FROM TB_STUDENT S
+                                           JOIN TB_GRADE G ON (S.STUDENT_NO = G.STUDENT_NO)
+                                           JOIN TB_DEPARTMENT D ON (S.DEPARTMENT_NO = D.DEPARTMENT_NO)
+                                           JOIN TB_CLASS C ON (G.CLASS_NO = C.CLASS_NO)
+                                           WHERE S.STUDENT_NAME = '김명훈'
+                                           AND D.DEPARTMENT_NAME = '의학과'
+                                           AND G.TERM_NO = '200501'
+                                           AND C.CLASS_NAME = '피부생리학'
+                                           );
+
 
 -- 8. 성적 테이블에서 휴학생들의 성적항목을 제거하시오
 
