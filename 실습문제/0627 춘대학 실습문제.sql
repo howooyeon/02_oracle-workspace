@@ -508,7 +508,7 @@ SET STUDENT_SSN = SUBSTR(STUDENT_SSN, 1, 6);
 -- 담당 교수의 확인 받은 결과 해당 과목의 학점을 3.5로 변경키로 결정되었다.
 UPDATE TB_GRADE
 SET POINT = 3.5
-WHERE (STUDENT_NO, TERM_NO, CLASS_NO) = (SELECT STUDENT_NO, TERM_NO, CLASS_NO
+WHERE (STUDENT_NO, TERM_NO, CLASS_NO) = (SELECT S.STUDENT_NO, G.TERM_NO, C.CLASS_NO
                                            FROM TB_STUDENT S
                                            JOIN TB_GRADE G ON (S.STUDENT_NO = G.STUDENT_NO)
                                            JOIN TB_DEPARTMENT D ON (S.DEPARTMENT_NO = D.DEPARTMENT_NO)
@@ -519,8 +519,9 @@ WHERE (STUDENT_NO, TERM_NO, CLASS_NO) = (SELECT STUDENT_NO, TERM_NO, CLASS_NO
                                            AND C.CLASS_NAME = '피부생리학'
                                            );
 
-
 -- 8. 성적 테이블에서 휴학생들의 성적항목을 제거하시오
-
-
+DELETE FROM TB_GRADE G
+WHERE G.STUDENT_NO IN (SELECT S.STUDENT_NO
+                        FROM TB_STUDENT S
+                        WHERE S.ABSENCE_YN = 'Y');
 
