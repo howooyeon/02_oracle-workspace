@@ -76,6 +76,7 @@ SELECT * FROM USER_TAB_COLUMNS;
     >> 잘못 작성해서 실행했을 경우 수정 후 다시 실행하면 됨!
 */
 
+
 COMMENT ON COLUMN MEMBER.MEM_NO IS '회원버노';
 COMMENT ON COLUMN MEMBER.MEM_NO IS '회원번호';
 
