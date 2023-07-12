@@ -127,10 +127,3 @@ INSERT
 SELECT * FROM EMPLOYEE;
 
 
-
-
-
-
-
-
-
