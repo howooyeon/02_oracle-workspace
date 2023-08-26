@@ -362,7 +362,3 @@ JOIN SAL_GRADE USING(SAL_LEVEL);
 
 -- only simple column names allowed here
 
-
-
-
-
